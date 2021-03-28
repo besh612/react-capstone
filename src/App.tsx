@@ -1,24 +1,15 @@
 import * as React from "react";
-import "./App.css";
+import { Route } from "react-router-dom";
+import Main from "./main/Main";
+import Login from "./login/LoginPage";
+import Dashboard from "./dashboard/Dashboard";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => (
+  <div>
+    <Route path="/" component={Main} exact />
+    <Route path="/login" component={Login} exact />
+    <Route path="/dashboard" component={Dashboard} exact />
+  </div>
+);
 
 export default App;
