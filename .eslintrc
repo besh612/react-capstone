@@ -61,7 +61,8 @@
       {
         "allowTypedFunctionExpressions": true
       }
-    ]
+    ],
+    "import/no-unresolved": "off"
   },
   "settings": {
     "react": {
