@@ -35,10 +35,10 @@ function CrackView() {
         <TableHead>
           <TableRow>
             <TableCell>Time</TableCell>
-            <TableCell>width</TableCell>
-            <TableCell>risk</TableCell>
-            <TableCell>gps</TableCell>
-            <TableCell>alt</TableCell>
+            <TableCell>Width</TableCell>
+            <TableCell>Risk</TableCell>
+            <TableCell>GPS</TableCell>
+            <TableCell>ALT</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
