@@ -9,7 +9,7 @@ import clsx from "clsx";
 
 import { mainListItems, secondaryListItems } from "./listItems";
 
-const drawerWidth = 220;
+const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   drawerPaper: {
