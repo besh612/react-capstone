@@ -1,4 +1,3 @@
-import { any } from "prop-types";
 import React, { useState } from "react";
 import { useViewer } from "react-three-viewer";
 import Button from "@material-ui/core/Button";
@@ -26,7 +25,7 @@ const ModelView: React.FC = () => {
     setUrl(urlValue);
   };
 
-  const handleFileFetch = (tsr: any) => {
+  const handleFileFetch = () => {
     fetch(url);
   };
 
