@@ -1,13 +1,18 @@
 import React from "react";
-import Drawer from "@material-ui/core/Drawer";
+import { Link } from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
 import IconButton from "@material-ui/core/IconButton";
+import Drawer from "@material-ui/core/Drawer";
 import Divider from "@material-ui/core/Divider";
 import List from "@material-ui/core/List";
-import { makeStyles } from "@material-ui/core/styles";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import clsx from "clsx";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
 
-import { mainListItems, secondaryListItems } from "./listItems";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+
+import clsx from "clsx";
+import routes from "./Routes";
 
 const drawerWidth = 240;
 
@@ -65,9 +70,22 @@ function CustomDrawer({ open, handleDrawerClose }: CustomDrawerProps) {
         </IconButton>
       </div>
       <Divider />
-      <List>{mainListItems}</List>
-      <Divider />
-      <List>{secondaryListItems}</List>
+      <List>
+        {routes.map((r, key) => (
+          <Link
+            to={r.path}
+            style={{ textDecoration: "none", color: "#000" }}
+            key={parseInt(key.toString(), 10)}
+          >
+            <ListItem button>
+              <ListItemIcon>
+                <r.icon />
+              </ListItemIcon>
+              <ListItemText primary={r.sidebarName} />
+            </ListItem>
+          </Link>
+        ))}
+      </List>
     </Drawer>
   );
 }
