@@ -1,15 +1,69 @@
 import * as React from "react";
-import { Route } from "react-router-dom";
-import Main from "./main/Main";
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+  RouteComponentProps,
+  withRouter,
+} from "react-router-dom";
+import { makeStyles } from "@material-ui/core/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Container from "@material-ui/core/Container";
+
 import Login from "./login/LoginPage";
+import Main from "./main/MainPage";
+import Appbar from "./components/Appbar";
 import Dashboard from "./dashboard/Dashboard";
+import CustomDrawer from "./components/Drawer";
+import Copyright from "./components/Copyright";
 
-const App = () => (
-  <div>
-    <Route path="/" component={Main} exact />
-    <Route path="/login" component={Login} exact />
-    <Route path="/dashboard" component={Dashboard} exact />
-  </div>
-);
+const useStyles = makeStyles((theme) => ({
+  root: {
+    display: "flex",
+  },
+  appBarSpacer: theme.mixins.toolbar,
+  content: {
+    flexGrow: 1,
+    height: "100vh",
+    overflow: "auto",
+  },
+  container: {
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+  },
+}));
 
-export default App;
+function App({ history }: RouteComponentProps) {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(true);
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Router>
+      <div className={classes.root}>
+        <CssBaseline />
+        <Appbar open={open} handleDrawerOpen={handleDrawerOpen} />
+        <CustomDrawer open={open} handleDrawerClose={handleDrawerClose} />
+        <main className={classes.content}>
+          <div className={classes.appBarSpacer} />
+          <Container maxWidth="xl" className={classes.container}>
+            <Switch>
+              <Route exact path="/" component={Main} />
+              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/login" component={Login} />
+              <Route path="*" component={Main} />
+            </Switch>
+          </Container>
+          <Copyright />
+        </main>
+      </div>
+    </Router>
+  );
+}
+
+export default withRouter(App);
