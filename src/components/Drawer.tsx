@@ -71,11 +71,11 @@ function CustomDrawer({ open, handleDrawerClose }: CustomDrawerProps) {
       </div>
       <Divider />
       <List>
-        {routes.map((r, key) => (
+        {routes.map((r) => (
           <Link
             to={r.path}
             style={{ textDecoration: "none", color: "#000" }}
-            key={parseInt(key.toString(), 10)}
+            key={r.id}
           >
             <ListItem button>
               <ListItemIcon>
