@@ -1,14 +1,16 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import { RouteComponentProps, useParams } from "react-router-dom";
 import clsx from "clsx";
+import axios from "axios";
 
-import Chart from "./components/ModelView";
 import PictureView from "./components/PictureView";
-import Orders from "./components/Orders";
 import CrackView from "./components/CrackView";
 import CommentView from "./components/CommentView";
 import MapView from "./components/MapView";
+
+import server from "../config/credentials.json";
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,65 +30,118 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Dashboard() {
+interface DashboardProps {
+  data: Array<Type>;
+  photoUrl: string;
+}
+
+interface Type {
+  id: number;
+  photoUrl: string;
+  comment: string;
+  location: {
+    locationX: number;
+    locationY: number;
+    locationDetail: string;
+  };
+  height: number;
+  riskLevel: string;
+  // createdDate: string;
+}
+
+interface ParamTypes {
+  id: string;
+}
+
+function Dashboard({ match }: RouteComponentProps) {
+  const [data, setData] = useState([] as DashboardProps[]);
+  const [loading, setLoading] = useState(false);
+  const [selected, setCrack] = useState(0);
   const classes = useStyles();
+  const { id } = useParams<ParamTypes>();
   const row1 = clsx(classes.paper, classes.fixedHeightRow1);
   const row2 = clsx(classes.paper, classes.fixedHeightRow2);
 
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${server.url}structure/${id}`);
+        setData(response.data.cracks);
+      } catch (e) {
+        console.log(e);
+      }
+      setLoading(false);
+    };
+    getData();
+  }, [id]);
+
+  // useEffect(() => {
+  //   console.log("is selected :", selected);
+  // }, [selected]);
+
+  if (loading) return <div>로딩중</div>;
+
+  if (!data) return null;
+
+  const handleCrack = (select: number) => {
+    setCrack(select);
+  };
+
   return (
     <>
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <Paper className={row1}>
-            <Chart />
-          </Paper>
-        </Grid>
-        <Grid item xs>
-          <Paper className={row1}>
-            <PictureView />
-          </Paper>
-        </Grid>
-        <Grid item xs={4}>
-          <Paper className={row1}>
-            <CrackView />
-          </Paper>
-        </Grid>
-      </Grid>
-      <Grid container spacing={3}>
-        <Grid item xs>
-          <Paper className={row2}>
-            <Chart />
-          </Paper>
-        </Grid>
-        <Grid item xs>
-          <Paper className={row2}>
-            <CommentView />
-          </Paper>
-        </Grid>
-        <Grid item xs={2}>
-          <Paper className={row2}>
-            <MapView />
-          </Paper>
-        </Grid>
-        <Grid item xs={2}>
-          <Paper className={row2}>
-            <Button
-              variant="outlined"
-              color="primary"
-              className={classes.button}
-            >
-              점검 시작
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              className={classes.button}
-            >
-              점검 종료
-            </Button>
-          </Paper>
-        </Grid>
-      </Grid>
+      {data && (
+        <>
+          <Grid container spacing={3}>
+            <Grid item xs={4}>
+              <Paper className={row1}>
+                <PictureView
+                  photoUrl={
+                    data[selected] !== undefined
+                      ? data[selected].photoUrl
+                      : "https://via.placeholder.com/300/09f/fff.png"
+                  }
+                />
+              </Paper>
+            </Grid>
+            <Grid item xs>
+              <Paper className={row1}>
+                <CrackView dataList={data} handleCrack={handleCrack} />
+              </Paper>
+            </Grid>
+          </Grid>
+          <Grid container spacing={3}>
+            <Grid item xs>
+              <Paper className={row2}>
+                <CommentView />
+              </Paper>
+            </Grid>
+            <Grid item xs={2}>
+              <Paper className={row2}>
+                <MapView />
+              </Paper>
+            </Grid>
+            <Grid item xs={2}>
+              <Paper className={row2}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  className={classes.button}
+                >
+                  점검 시작
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  className={classes.button}
+                >
+                  점검 종료
+                </Button>
+              </Paper>
+            </Grid>
+          </Grid>
+        </>
+      )}
     </>
   );
 }

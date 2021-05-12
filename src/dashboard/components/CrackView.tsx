@@ -6,7 +6,24 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Title from "./Title";
 
-// Generate Order Data
+interface CrackViewProps {
+  handleCrack: (select: number) => void;
+  dataList: [
+    {
+      id: number;
+      comment: string;
+      location: {
+        locationX: number;
+        locationY: number;
+        locationDetail: string;
+      };
+      photoUrl: string;
+      height: number;
+      riskLevel: string;
+    }
+  ];
+}
+
 function createData(
   id: number,
   time: string,
@@ -27,7 +44,7 @@ const rows = [
   createData(4, "13:43:12", 3.5, "High", 37.241, 125.424, 5121),
 ];
 
-function CrackView() {
+function CrackView({ dataList, handleCrack }: CrackViewProps) {
   return (
     <>
       <Title>균열 정보</Title>
@@ -42,17 +59,17 @@ function CrackView() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell>{row.time}</TableCell>
-              <TableCell>{row.width}mm</TableCell>
-              <TableCell>{row.risk}</TableCell>
+          {dataList.map((row, idx) => (
+            <TableRow key={row.id} onClick={() => handleCrack(idx)} hover>
+              <TableCell>{row.comment}</TableCell>
+              <TableCell>{row.photoUrl}mm</TableCell>
+              <TableCell>{row.riskLevel}</TableCell>
               <TableCell size="medium">
-                x: {row.x}
+                x: {row.location.locationX}
                 {"\n"}
-                y: {row.y}
+                y: {row.location.locationY}
               </TableCell>
-              <TableCell>{row.alt}cm</TableCell>
+              <TableCell>{row.height}cm</TableCell>
             </TableRow>
           ))}
         </TableBody>
