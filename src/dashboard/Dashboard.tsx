@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { RouteComponentProps, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import clsx from "clsx";
 import axios from "axios";
 
@@ -31,30 +31,15 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface DashboardProps {
-  data: Array<Type>;
   photoUrl: string;
-}
-
-interface Type {
-  id: number;
-  photoUrl: string;
-  comment: string;
-  location: {
-    locationX: number;
-    locationY: number;
-    locationDetail: string;
-  };
-  height: number;
-  riskLevel: string;
-  // createdDate: string;
 }
 
 interface ParamTypes {
   id: string;
 }
 
-function Dashboard({ match }: RouteComponentProps) {
-  const [data, setData] = useState([] as DashboardProps[]);
+function Dashboard(): React.ReactElement {
+  const [data, setData] = useState<DashboardProps[]>();
   const [loading, setLoading] = useState(false);
   const [selected, setCrack] = useState(0);
   const classes = useStyles();
@@ -69,20 +54,16 @@ function Dashboard({ match }: RouteComponentProps) {
         const response = await axios.get(`${server.url}structure/${id}`);
         setData(response.data.cracks);
       } catch (e) {
-        console.log(e);
+        throw new Error(`structure 불러오기 실패: ${e}`);
       }
       setLoading(false);
     };
     getData();
   }, [id]);
 
-  // useEffect(() => {
-  //   console.log("is selected :", selected);
-  // }, [selected]);
-
   if (loading) return <div>로딩중</div>;
 
-  if (!data) return null;
+  if (!data) return <div>불러오기 실패</div>;
 
   const handleCrack = (select: number) => {
     setCrack(select);

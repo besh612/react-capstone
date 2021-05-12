@@ -45,7 +45,7 @@ type AppbarProps = {
   handleDrawerOpen: () => void;
 };
 
-function Appbar({ open, handleDrawerOpen }: AppbarProps) {
+function Appbar({ open, handleDrawerOpen }: AppbarProps): React.ReactElement {
   const classes = useStyles();
   return (
     <AppBar

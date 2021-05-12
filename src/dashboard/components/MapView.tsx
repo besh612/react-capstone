@@ -2,7 +2,7 @@ import React from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import keys from "../../config/credentials.json";
 
-function MapView() {
+function MapView(): React.ReactElement {
   const locations = [
     {
       name: "Location 1",

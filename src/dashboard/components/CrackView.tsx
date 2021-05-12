@@ -8,43 +8,27 @@ import Title from "./Title";
 
 interface CrackViewProps {
   handleCrack: (select: number) => void;
-  dataList: [
-    {
-      id: number;
-      comment: string;
-      location: {
-        locationX: number;
-        locationY: number;
-        locationDetail: string;
-      };
-      photoUrl: string;
-      height: number;
-      riskLevel: string;
-    }
-  ];
+  dataList: Array<Type>;
 }
 
-function createData(
-  id: number,
-  time: string,
-  width: number,
-  risk: string,
-  x: number,
-  y: number,
-  alt: number
-) {
-  return { id, time, width, risk, x, y, alt };
+interface Type {
+  id?: number;
+  photoUrl?: string;
+  comment?: string;
+  location?: {
+    locationX?: number;
+    locationY?: number;
+    locationDetail?: string;
+  };
+  height?: number;
+  riskLevel?: string;
+  createdDate?: string;
 }
 
-const rows = [
-  createData(0, "13:43:12", 3.5, "High", 37.241, 125.424, 1211),
-  createData(1, "13:43:12", 3.5, "High", 37.241, 125.424, 1613),
-  createData(2, "13:43:12", 3.5, "High", 37.241, 125.424, 3214),
-  createData(3, "13:43:12", 3.5, "High", 37.241, 125.424, 1452),
-  createData(4, "13:43:12", 3.5, "High", 37.241, 125.424, 5121),
-];
-
-function CrackView({ dataList, handleCrack }: CrackViewProps) {
+function CrackView({
+  dataList,
+  handleCrack,
+}: CrackViewProps): React.ReactElement {
   return (
     <>
       <Title>균열 정보</Title>
@@ -65,9 +49,9 @@ function CrackView({ dataList, handleCrack }: CrackViewProps) {
               <TableCell>{row.photoUrl}mm</TableCell>
               <TableCell>{row.riskLevel}</TableCell>
               <TableCell size="medium">
-                x: {row.location.locationX}
+                x: {row?.location?.locationX}
                 {"\n"}
-                y: {row.location.locationY}
+                y: {row?.location?.locationY}
               </TableCell>
               <TableCell>{row.height}cm</TableCell>
             </TableRow>

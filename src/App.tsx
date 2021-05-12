@@ -3,7 +3,6 @@ import {
   BrowserRouter as Router,
   Route,
   Switch,
-  RouteComponentProps,
   withRouter,
 } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
@@ -34,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function App({ history }: RouteComponentProps) {
+function App() {
   const classes = useStyles();
   const [open, setOpen] = React.useState(true);
   const handleDrawerOpen = () => {

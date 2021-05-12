@@ -54,7 +54,10 @@ type CustomDrawerProps = {
   handleDrawerClose: () => void;
 };
 
-function CustomDrawer({ open, handleDrawerClose }: CustomDrawerProps) {
+function CustomDrawer({
+  open,
+  handleDrawerClose,
+}: CustomDrawerProps): React.ReactElement {
   const classes = useStyles();
   return (
     <Drawer

@@ -1,11 +1,17 @@
 import React from "react";
 
-type PictureViewProps = {
+interface PictureViewProps {
   photoUrl: string;
-};
+}
 
-const PictureView = ({ photoUrl }: PictureViewProps) => (
-  <img src={photoUrl} alt="균열" style={{ height: 400, width: "100%" }} />
-);
+function PictureView({ photoUrl }: PictureViewProps): React.ReactElement {
+  return (
+    <img
+      src={photoUrl}
+      alt="균열"
+      style={{ height: 400, width: "100%", objectFit: "cover" }}
+    />
+  );
+}
 
 export default PictureView;

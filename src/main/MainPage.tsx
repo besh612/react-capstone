@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { number } from "prop-types";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -31,18 +30,21 @@ const useStyles = makeStyles({
   },
 });
 
-function MainPage() {
-  const [data, setData] = useState({
-    projects: [
-      {
-        id: number,
-        name: "",
-        comment: "",
-        location: { locationX: number, locationY: number },
-        createdDate: "",
-      },
-    ],
-  });
+interface Projects {
+  projects: Array<{
+    id: number;
+    name: string;
+    comment: string;
+    location: {
+      locationX: number;
+      locationY: number;
+    };
+    createDate: string;
+  }>;
+}
+
+function MainPage(): React.ReactElement {
+  const [data, setData] = useState<Projects>();
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
   const history = useHistory();
@@ -54,7 +56,7 @@ function MainPage() {
         const response = await axios.get(`${server.url}user/1`);
         setData(response.data);
       } catch (e) {
-        console.log(e);
+        throw new Error(`user 불러오기 실패: ${e}`);
       }
       setLoading(false);
     };
@@ -63,7 +65,7 @@ function MainPage() {
 
   if (loading) return <div>로딩중</div>;
 
-  if (!data) return null;
+  if (!data) return <div>불러오기 실패</div>;
 
   const handleClick = (id: number) => {
     const path = `/project/${id}`;
@@ -101,7 +103,7 @@ function MainPage() {
                   </TableCell>
                   <TableCell align="right">{row.location.locationX}</TableCell>
                   <TableCell align="right">{row.location.locationY}</TableCell>
-                  <TableCell align="right">{row.createdDate}</TableCell>
+                  <TableCell align="right">{row.createDate}</TableCell>
                 </TableRow>
               ))}
           </TableBody>

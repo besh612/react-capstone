@@ -1,14 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import { RouteComponentProps, useParams, useHistory } from "react-router-dom";
-import { number } from "prop-types";
-
+import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
@@ -43,34 +40,36 @@ interface ParamTypes {
   id: string;
 }
 
-function Project({ match }: RouteComponentProps) {
-  const [data, setData] = useState({
-    id: number,
-    name: "",
-    comment: "",
-    userId: number,
-    photoUrl: "",
-    location: {
-      locationX: number,
-      locationY: number,
-      locationDetail: "String",
-    },
-    structures: [
-      {
-        id: number,
-        name: "",
-        comment: "",
-        modelUrl: "",
-        location: {
-          locationX: number,
-          locationY: number,
-          locationDetail: "",
-        },
-        height: number,
-        createdDate: "",
-      },
-    ],
-  });
+interface Projects {
+  id: number;
+  name: string;
+  comment: string;
+  userId: number;
+  photoUrl: string;
+  location: {
+    locationX: number;
+    locationY: number;
+    locationDetail: string;
+  };
+  structures: Array<Structure>;
+}
+
+interface Structure {
+  id: number;
+  name: string;
+  comment: string;
+  modelUrl: string;
+  location: {
+    locationX: number;
+    locationY: number;
+    locationDetail: string;
+  };
+  height: number;
+  createdDate: string;
+}
+
+function Project(): React.ReactElement {
+  const [data, setData] = useState<Projects>();
 
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
@@ -83,9 +82,8 @@ function Project({ match }: RouteComponentProps) {
       try {
         const response = await axios.get(`${server.url}project/${id}`);
         setData(response.data);
-        console.log("data :", response.data);
       } catch (e) {
-        console.log(e);
+        throw new Error(`project 불러오기 실패: ${e}`);
       }
       setLoading(false);
     };
@@ -94,7 +92,7 @@ function Project({ match }: RouteComponentProps) {
 
   if (loading) return <div>로딩중</div>;
 
-  if (!data) return null;
+  if (!data) return <div>불러오기 실패</div>;
 
   const handleClick = (structureId: number) => {
     const path = `/dashboard/${structureId}`;
