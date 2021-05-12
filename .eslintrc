@@ -62,13 +62,8 @@
         "devDependencies": true
       }
     ],
-    //missing return type on function 오류 보이지 않기..?
-    "@typescript-eslint/explicit-function-return-type": [
-      "off",
-      {
-        "allowTypedFunctionExpressions": true
-      }
-    ],
+    //missing return type on function 오류 보이지 않기
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "import/no-unresolved": "off"
   },
   "settings": {
