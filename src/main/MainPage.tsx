@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { number } from "prop-types";
+import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -44,6 +45,7 @@ function MainPage() {
   });
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
+  const history = useHistory();
 
   useEffect(() => {
     const getData = async () => {
@@ -64,7 +66,8 @@ function MainPage() {
   if (!data) return null;
 
   const handleClick = (id: number) => {
-    console.log(`${id} clicked`);
+    const path = `/project/${id}`;
+    history.push(path);
   };
 
   return (

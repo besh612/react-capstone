@@ -14,6 +14,7 @@ import Login from "./login/LoginPage";
 import Main from "./main/MainPage";
 import Appbar from "./components/Appbar";
 import Dashboard from "./dashboard/Dashboard";
+import Project from "./project/Project";
 import CustomDrawer from "./components/Drawer";
 import Copyright from "./components/Copyright";
 
@@ -54,7 +55,8 @@ function App({ history }: RouteComponentProps) {
           <Container maxWidth="xl" className={classes.container}>
             <Switch>
               <Route exact path="/" component={Main} />
-              <Route path="/dashboard" component={Dashboard} />
+              <Route path="/dashboard/:id" component={Dashboard} />
+              <Route path="/project/:id" component={Project} />
               <Route path="/login" component={Login} />
               <Route path="*" component={Main} />
             </Switch>
