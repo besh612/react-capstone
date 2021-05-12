@@ -1,0 +1,165 @@
+import React, { useEffect, useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { RouteComponentProps, useParams, useHistory } from "react-router-dom";
+import { number } from "prop-types";
+
+import axios from "axios";
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Typography from "@material-ui/core/Typography";
+
+import server from "../config/credentials.json";
+
+const useStyles = makeStyles({
+  paper: {
+    padding: 20,
+    height: "80vh",
+  },
+  table: {
+    minWidth: "50vw",
+  },
+  header: {
+    display: "flex",
+  },
+  button: {
+    margin: 10,
+  },
+  image: {
+    padding: 10,
+    height: 200,
+    weight: 200,
+  },
+});
+
+interface ParamTypes {
+  id: string;
+}
+
+function Project({ match }: RouteComponentProps) {
+  const [data, setData] = useState({
+    id: number,
+    name: "",
+    comment: "",
+    userId: number,
+    photoUrl: "",
+    location: {
+      locationX: number,
+      locationY: number,
+      locationDetail: "String",
+    },
+    structures: [
+      {
+        id: number,
+        name: "",
+        comment: "",
+        modelUrl: "",
+        location: {
+          locationX: number,
+          locationY: number,
+          locationDetail: "",
+        },
+        height: number,
+        createdDate: "",
+      },
+    ],
+  });
+
+  const [loading, setLoading] = useState(false);
+  const classes = useStyles();
+  const history = useHistory();
+  const { id } = useParams<ParamTypes>();
+
+  useEffect(() => {
+    const getData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${server.url}project/${id}`);
+        setData(response.data);
+        console.log("data :", response.data);
+      } catch (e) {
+        console.log(e);
+      }
+      setLoading(false);
+    };
+    getData();
+  }, [id]);
+
+  if (loading) return <div>로딩중</div>;
+
+  if (!data) return null;
+
+  const handleClick = (structureId: number) => {
+    const path = `/dashboard/${structureId}`;
+    history.push(path);
+  };
+
+  return (
+    <Paper className={classes.paper}>
+      {data != null && (
+        <>
+          <div className={classes.header}>
+            <Typography variant="h4">{data.name}</Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+            >
+              추가
+            </Button>
+          </div>
+          <Grid container spacing={2} direction="row">
+            <Grid item xs={3}>
+              <Grid item xs container direction="column" spacing={2}>
+                <img src={data.photoUrl} alt="" className={classes.image} />
+                <Typography>{data.comment}</Typography>
+              </Grid>
+            </Grid>
+            <Grid item xs={12} style={{ flexBasis: 0 }}>
+              <Table className={classes.table} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>구조물 이름</TableCell>
+                    <TableCell align="right">위치x</TableCell>
+                    <TableCell align="right">위치y</TableCell>
+                    <TableCell align="right">생성일</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data.structures.map((row) => (
+                    <TableRow
+                      key={parseInt(row.id.toString(), 10)}
+                      onClick={() =>
+                        handleClick(parseInt(row.id.toString(), 10))
+                      }
+                      hover
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.name}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.location.locationX}
+                      </TableCell>
+                      <TableCell align="right">
+                        {row.location.locationY}
+                      </TableCell>
+                      <TableCell align="right">{row.createdDate}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </Grid>
+          </Grid>
+        </>
+      )}
+    </Paper>
+  );
+}
+export default Project;
