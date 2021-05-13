@@ -4,6 +4,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+import Checkbox from "@material-ui/core/Checkbox";
 import Title from "./Title";
 
 interface CrackViewProps {
@@ -40,20 +41,22 @@ function CrackView({
             <TableCell>Risk</TableCell>
             <TableCell>GPS</TableCell>
             <TableCell>ALT</TableCell>
+            <TableCell>isCrack</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {dataList.map((row, idx) => (
             <TableRow key={row.id} onClick={() => handleCrack(idx)} hover>
-              <TableCell>{row.comment}</TableCell>
-              <TableCell>{row.photoUrl}mm</TableCell>
+              <TableCell>{row.createdDate?.slice(11)}</TableCell>
+              <TableCell>{row.height}mm</TableCell>
               <TableCell>{row.riskLevel}</TableCell>
               <TableCell size="medium">
-                x: {row?.location?.locationX}
-                {"\n"}
-                y: {row?.location?.locationY}
+                {`x: ${row?.location?.locationX} y: ${row?.location?.locationY}`}
               </TableCell>
               <TableCell>{row.height}cm</TableCell>
+              <TableCell>
+                <Checkbox />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
