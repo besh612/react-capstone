@@ -21,18 +21,26 @@ const useStyles = makeStyles({
     height: "80vh",
   },
   table: {
-    minWidth: "50vw",
+    minWidth: "60vw",
   },
   header: {
     display: "flex",
+    position: "relative",
   },
-  button: {
-    margin: 10,
+  addButton: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    right: 0,
+    margin: "auto",
   },
   image: {
     padding: 10,
-    height: 200,
-    weight: 200,
+    height: "100%",
+    width: "100%",
+  },
+  projectComment: {
+    padding: 10,
   },
 });
 
@@ -96,7 +104,7 @@ function Project(): React.ReactElement {
 
   const handleClick = (structureId: number) => {
     const path = `/dashboard/${structureId}`;
-    history.push(path);
+    history.push({ pathname: path, state: data.comment });
   };
 
   return (
@@ -108,16 +116,22 @@ function Project(): React.ReactElement {
             <Button
               variant="contained"
               color="primary"
-              className={classes.button}
+              className={classes.addButton}
             >
-              추가
+              구조물 추가
             </Button>
           </div>
           <Grid container spacing={2} direction="row">
             <Grid item xs={3}>
               <Grid item xs container direction="column" spacing={2}>
-                <img src={data.photoUrl} alt="" className={classes.image} />
-                <Typography>{data.comment}</Typography>
+                <Grid>
+                  <img src={data.photoUrl} alt="" className={classes.image} />
+                </Grid>
+                <Grid>
+                  <Typography className={classes.projectComment}>
+                    {data.comment}
+                  </Typography>
+                </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12} style={{ flexBasis: 0 }}>
@@ -148,7 +162,9 @@ function Project(): React.ReactElement {
                       <TableCell align="right">
                         {row.location.locationY}
                       </TableCell>
-                      <TableCell align="right">{row.createdDate}</TableCell>
+                      <TableCell align="right">
+                        {row.createdDate.slice(0, 10)}
+                      </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>

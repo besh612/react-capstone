@@ -24,9 +24,14 @@ const useStyles = makeStyles({
   },
   header: {
     display: "flex",
+    position: "relative",
   },
-  button: {
-    margin: 10,
+  addButton: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    right: 0,
+    margin: "auto",
   },
 });
 
@@ -38,8 +43,10 @@ interface Projects {
     location: {
       locationX: number;
       locationY: number;
+      locationDetail: string;
     };
-    createDate: string;
+    structures: [];
+    createdDate: string;
   }>;
 }
 
@@ -75,16 +82,21 @@ function MainPage(): React.ReactElement {
   return (
     <Paper className={classes.paper}>
       <div className={classes.header}>
-        <Typography variant="h4">프로젝트 보기</Typography>
-        <Button variant="contained" color="primary" className={classes.button}>
-          추가
+        <Typography variant="h4">프로젝트</Typography>
+        <Button
+          variant="contained"
+          color="primary"
+          className={classes.addButton}
+        >
+          프로젝트 추가
         </Button>
       </div>
       <TableContainer>
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell>프로젝트 이름</TableCell>
+              <TableCell>이름</TableCell>
+              <TableCell>주소</TableCell>
               <TableCell align="right">위치x</TableCell>
               <TableCell align="right">위치y</TableCell>
               <TableCell align="right">생성일</TableCell>
@@ -101,9 +113,12 @@ function MainPage(): React.ReactElement {
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
+                  <TableCell>{row.location.locationDetail}</TableCell>
                   <TableCell align="right">{row.location.locationX}</TableCell>
                   <TableCell align="right">{row.location.locationY}</TableCell>
-                  <TableCell align="right">{row.createDate}</TableCell>
+                  <TableCell align="right">
+                    {row.createdDate.slice(0, 10)}
+                  </TableCell>
                 </TableRow>
               ))}
           </TableBody>

@@ -1,5 +1,6 @@
 import React from "react";
 import clsx from "clsx";
+import { Link } from "react-router-dom";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -12,6 +13,7 @@ const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
   toolbar: {
+    position: "relative",
     paddingRight: 24, // keep right padding when drawer closed
   },
   appBar: {
@@ -38,6 +40,13 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
+  loginButton: {
+    top: 0,
+    bottom: 0,
+    right: 15,
+    margin: "auto",
+    position: "absolute",
+  },
 }));
 
 type AppbarProps = {
@@ -62,16 +71,18 @@ function Appbar({ open, handleDrawerOpen }: AppbarProps): React.ReactElement {
         >
           <MenuIcon />
         </IconButton>
-        <Typography
-          component="h1"
-          variant="h6"
-          color="inherit"
-          noWrap
-          className={classes.title}
-        >
-          FICK
-        </Typography>
-        <IconButton color="inherit">
+        <Link to="/" style={{ textDecoration: "none", color: "#fff" }}>
+          <Typography
+            component="h1"
+            variant="h6"
+            color="inherit"
+            noWrap
+            className={classes.title}
+          >
+            FICK
+          </Typography>
+        </Link>
+        <IconButton className={classes.loginButton} color="inherit">
           <AccountCircleIcon />
         </IconButton>
       </Toolbar>
