@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Paper } from "@material-ui/core";
+import { Grid, Paper } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import axios from "axios";
 
@@ -9,6 +9,7 @@ import PictureView from "./components/PictureView";
 import CrackView from "./components/CrackView";
 import CommentView from "./components/CommentView";
 import MapView from "./components/MapView";
+import ControlView from "./components/ControlView";
 
 import server from "../config/credentials.json";
 
@@ -38,11 +39,16 @@ interface ParamTypes {
   id: string;
 }
 
+interface LocationTypes {
+  state: string;
+}
+
 function Dashboard(): React.ReactElement {
   const [data, setData] = useState<DashboardProps[]>();
   const [loading, setLoading] = useState(false);
   const [selected, setCrack] = useState(0);
   const classes = useStyles();
+  const location = useLocation<LocationTypes>();
   const { id } = useParams<ParamTypes>();
   const row1 = clsx(classes.paper, classes.fixedHeightRow1);
   const row2 = clsx(classes.paper, classes.fixedHeightRow2);
@@ -94,30 +100,17 @@ function Dashboard(): React.ReactElement {
           <Grid container spacing={3}>
             <Grid item xs>
               <Paper className={row2}>
-                <CommentView />
+                <CommentView comment={location.state} />
               </Paper>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
               <Paper className={row2}>
                 <MapView />
               </Paper>
             </Grid>
             <Grid item xs={2}>
               <Paper className={row2}>
-                <Button
-                  variant="outlined"
-                  color="primary"
-                  className={classes.button}
-                >
-                  점검 시작
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="secondary"
-                  className={classes.button}
-                >
-                  점검 종료
-                </Button>
+                <ControlView />
               </Paper>
             </Grid>
           </Grid>
