@@ -1,15 +1,33 @@
 import React from "react";
-import { Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import TextField from "@material-ui/core/TextField";
 import Title from "./Title";
 
-const message = `Truncation should be conditionally applicable on this long line of text
- as this is a much longer line than what the container can support. `;
+const useStyles = makeStyles({
+  commentField: {
+    height: "100%",
+    border: 0,
+  },
+});
 
-function CommentView(): React.ReactElement {
+interface CommentProps {
+  comment: {
+    state: string;
+  };
+}
+
+function CommentView({ comment }: CommentProps): React.ReactElement {
+  const classes = useStyles();
   return (
     <>
       <Title>상태</Title>
-      <Typography>{message}</Typography>
+      <TextField
+        variant="outlined"
+        className={classes.commentField}
+        defaultValue={comment}
+        multiline
+        rows={8}
+      />
     </>
   );
 }
