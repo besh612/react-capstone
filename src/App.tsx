@@ -1,10 +1,5 @@
 import React, { useState } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch,
-  withRouter,
-} from "react-router-dom";
+import { Route, Switch, withRouter } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -44,26 +39,24 @@ function App(): React.ReactElement {
   };
 
   return (
-    <Router>
-      <div className={classes.root}>
-        <CssBaseline />
-        <Appbar open={open} handleDrawerOpen={handleDrawerOpen} />
-        <CustomDrawer open={open} handleDrawerClose={handleDrawerClose} />
-        <main className={classes.content}>
-          <div className={classes.appBarSpacer} />
-          <Container maxWidth="xl" className={classes.container}>
-            <Switch>
-              <Route exact path="/" component={Main} />
-              <Route path="/dashboard/:id" component={Dashboard} />
-              <Route path="/project/:id" component={Project} />
-              <Route path="/login" component={Login} />
-              <Route path="*" component={Main} />
-            </Switch>
-          </Container>
-          <Copyright />
-        </main>
-      </div>
-    </Router>
+    <div className={classes.root}>
+      <CssBaseline />
+      <Appbar open={open} handleDrawerOpen={handleDrawerOpen} />
+      <CustomDrawer open={open} handleDrawerClose={handleDrawerClose} />
+      <main className={classes.content}>
+        <div className={classes.appBarSpacer} />
+        <Container maxWidth="xl" className={classes.container}>
+          <Switch>
+            <Route exact path="/" component={Main} />
+            <Route path="/dashboard/:id" component={Dashboard} />
+            <Route path="/project/:id" component={Project} />
+            <Route path="/login" component={Login} />
+            <Route path="*" component={Main} />
+          </Switch>
+        </Container>
+        <Copyright />
+      </main>
+    </div>
   );
 }
 
