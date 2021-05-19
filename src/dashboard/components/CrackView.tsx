@@ -22,6 +22,7 @@ interface Type {
     locationDetail?: string;
   };
   height?: number;
+  width?: number;
   riskLevel?: string;
   createdDate?: string;
 }
@@ -48,7 +49,7 @@ function CrackView({
           {dataList.map((row, idx) => (
             <TableRow key={row.id} onClick={() => handleCrack(idx)} hover>
               <TableCell>{row.createdDate?.slice(11)}</TableCell>
-              <TableCell>{row.height}mm</TableCell>
+              <TableCell>{row.width}mm</TableCell>
               <TableCell>{row.riskLevel}</TableCell>
               <TableCell size="medium">
                 {`x: ${row?.location?.locationX} y: ${row?.location?.locationY}`}
