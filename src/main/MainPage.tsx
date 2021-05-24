@@ -11,6 +11,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import server from "../config/credentials.json";
 
@@ -70,9 +71,12 @@ function MainPage(): React.ReactElement {
     getData();
   }, []);
 
-  if (loading) return <div>로딩중</div>;
-
-  if (!data) return <div>불러오기 실패</div>;
+  if (loading || !data)
+    return (
+      <div>
+        <LinearProgress />
+      </div>
+    );
 
   const handleClick = (id: number) => {
     const path = `/project/${id}`;
