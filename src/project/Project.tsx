@@ -12,8 +12,10 @@ import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
+import LinearProgress from "@material-ui/core/LinearProgress";
 
 import server from "../config/credentials.json";
+import Modal from "./components/Modal";
 
 const useStyles = makeStyles({
   paper: {
@@ -78,33 +80,44 @@ interface Structure {
 
 function Project(): React.ReactElement {
   const [data, setData] = useState<Projects>();
-
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
   const history = useHistory();
   const { id } = useParams<ParamTypes>();
 
   useEffect(() => {
+    setLoading(true);
     const getData = async () => {
-      setLoading(true);
       try {
         const response = await axios.get(`${server.url}project/${id}`);
         setData(response.data);
       } catch (e) {
         throw new Error(`project 불러오기 실패: ${e}`);
       }
-      setLoading(false);
     };
     getData();
-  }, [id]);
+    setLoading(false);
+  }, [id, open]);
 
-  if (loading) return <div>로딩중</div>;
-
-  if (!data) return <div>불러오기 실패</div>;
+  if (loading || !data)
+    return (
+      <div>
+        <LinearProgress />
+      </div>
+    );
 
   const handleClick = (structureId: number) => {
     const path = `/dashboard/${structureId}`;
     history.push({ pathname: path, state: data.comment });
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
   };
 
   return (
@@ -116,6 +129,7 @@ function Project(): React.ReactElement {
             <Button
               variant="contained"
               color="primary"
+              onClick={() => handleClickOpen()}
               className={classes.addButton}
             >
               구조물 추가
@@ -173,6 +187,7 @@ function Project(): React.ReactElement {
           </Grid>
         </>
       )}
+      <Modal handleClose={handleClose} open={open} id={id} />
     </Paper>
   );
 }
