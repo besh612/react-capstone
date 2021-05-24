@@ -52,7 +52,9 @@ function CrackView({
               <TableCell>{row.width}mm</TableCell>
               <TableCell>{row.riskLevel}</TableCell>
               <TableCell size="medium">
-                {`x: ${row?.location?.locationX} y: ${row?.location?.locationY}`}
+                {`x: ${row?.location?.locationX?.toFixed(
+                  3
+                )} y: ${row?.location?.locationY?.toFixed(3)}`}
               </TableCell>
               <TableCell>{row.height}cm</TableCell>
               <TableCell>
