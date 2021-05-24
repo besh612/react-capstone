@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Paper } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import { useParams, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import axios from "axios";
+import { Grid, Paper, LinearProgress } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+import { useParams, useLocation } from "react-router-dom";
 
 import PictureView from "./components/PictureView";
 import CrackView from "./components/CrackView";
@@ -33,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
 
 interface DashboardProps {
   photoUrl: string;
+  location: {
+    locationX: number;
+    locationY: number;
+  };
 }
 
 interface ParamTypes {
@@ -67,9 +71,12 @@ function Dashboard(): React.ReactElement {
     getData();
   }, [id]);
 
-  if (loading) return <div>로딩중</div>;
-
-  if (!data) return <div>불러오기 실패</div>;
+  if (loading || !data)
+    return (
+      <div>
+        <LinearProgress />
+      </div>
+    );
 
   const handleCrack = (select: number) => {
     setCrack(select);
@@ -105,7 +112,10 @@ function Dashboard(): React.ReactElement {
             </Grid>
             <Grid item xs={3}>
               <Paper className={row2}>
-                <MapView />
+                <MapView
+                  lat={data[selected] && data[selected].location.locationX}
+                  lng={data[selected] && data[selected].location.locationY}
+                />
               </Paper>
             </Grid>
             <Grid item xs={2}>
