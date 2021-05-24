@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route, Switch, withRouter } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Container from "@material-ui/core/Container";
@@ -60,4 +60,4 @@ function App(): React.ReactElement {
   );
 }
 
-export default withRouter(App);
+export default App;
