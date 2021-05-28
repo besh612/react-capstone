@@ -1,13 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { green } from "@material-ui/core/colors";
 import { useParams, useHistory } from "react-router-dom";
 import axios from "axios";
 
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import Paper from "@material-ui/core/Paper";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -16,30 +12,43 @@ import LinearProgress from "@material-ui/core/LinearProgress";
 
 import server from "../config/credentials.json";
 import Modal from "./components/Modal";
+import StructureView from "./components/StructureView";
 
 const useStyles = makeStyles({
-  paper: {
-    padding: 20,
-    height: "80vh",
+  header: {
+    padding: 10,
+    position: "relative",
   },
   table: {
     minWidth: "60vw",
   },
-  header: {
-    display: "flex",
-    position: "relative",
+  paper: {
+    padding: 10,
+    height: "60vh",
   },
   addButton: {
     position: "absolute",
     top: 0,
     bottom: 0,
-    right: 0,
+    right: 10,
+    height: 40,
     margin: "auto",
+  },
+  downButton: {
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    right: 120,
+    height: 40,
+    margin: "auto",
+    color: green[600],
+    borderColor: green[600],
   },
   image: {
     padding: 10,
-    height: "100%",
-    width: "100%",
+    height: 280,
+    width: 280,
+    border: "1px solid #555;",
   },
   projectComment: {
     padding: 10,
@@ -61,21 +70,7 @@ interface Projects {
     locationY: number;
     locationDetail: string;
   };
-  structures: Array<Structure>;
-}
-
-interface Structure {
-  id: number;
-  name: string;
-  comment: string;
-  modelUrl: string;
-  location: {
-    locationX: number;
-    locationY: number;
-    locationDetail: string;
-  };
-  height: number;
-  createdDate: string;
+  structures: [];
 }
 
 function Project(): React.ReactElement {
@@ -112,6 +107,23 @@ function Project(): React.ReactElement {
     history.push({ pathname: path, state: data.comment });
   };
 
+  const handleResultExport = () => {
+    axios({
+      method: "GET",
+      url: `${server.url}excel/${id}`,
+      responseType: "blob",
+    }).then((response) => {
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], { type: response.headers["content-type"] })
+      );
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `result_prject${id}.xlsx`);
+      document.body.appendChild(link);
+      link.click();
+    });
+  };
+
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -121,10 +133,10 @@ function Project(): React.ReactElement {
   };
 
   return (
-    <Paper className={classes.paper}>
+    <div>
       {data != null && (
         <>
-          <div className={classes.header}>
+          <Paper className={classes.header}>
             <Typography variant="h4">{data.name}</Typography>
             <Button
               variant="contained"
@@ -134,61 +146,39 @@ function Project(): React.ReactElement {
             >
               구조물 추가
             </Button>
-          </div>
-          <Grid container spacing={2} direction="row">
-            <Grid item xs={3}>
-              <Grid item xs container direction="column" spacing={2}>
-                <Grid>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={() => handleResultExport()}
+              className={classes.downButton}
+            >
+              결과 출력
+            </Button>
+          </Paper>
+          <Grid container spacing={2} direction="row" style={{ marginTop: 8 }}>
+            <Grid item>
+              <Grid direction="column">
+                <Paper className={classes.paper}>
                   <img src={data.photoUrl} alt="" className={classes.image} />
-                </Grid>
-                <Grid>
                   <Typography className={classes.projectComment}>
                     {data.comment}
                   </Typography>
-                </Grid>
+                </Paper>
               </Grid>
             </Grid>
-            <Grid item xs={12} style={{ flexBasis: 0 }}>
-              <Table className={classes.table} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell>구조물 이름</TableCell>
-                    <TableCell align="right">위치x</TableCell>
-                    <TableCell align="right">위치y</TableCell>
-                    <TableCell align="right">생성일</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {data.structures.map((row) => (
-                    <TableRow
-                      key={parseInt(row.id.toString(), 10)}
-                      onClick={() =>
-                        handleClick(parseInt(row.id.toString(), 10))
-                      }
-                      hover
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.location.locationX}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.location.locationY}
-                      </TableCell>
-                      <TableCell align="right">
-                        {row.createdDate.slice(0, 10)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+            <Grid item xs style={{ flexBasis: 0 }}>
+              <Paper className={classes.paper}>
+                <StructureView
+                  data={data.structures}
+                  handleClick={handleClick}
+                />
+              </Paper>
             </Grid>
           </Grid>
         </>
       )}
       <Modal handleClose={handleClose} open={open} id={id} />
-    </Paper>
+    </div>
   );
 }
 export default Project;

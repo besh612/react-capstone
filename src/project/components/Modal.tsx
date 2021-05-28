@@ -80,7 +80,7 @@ function Modal({ handleClose, open, id }: ModalProps): React.ReactElement {
       onClose={handleClose}
       aria-labelledby="max-width-dialog-title"
     >
-      <DialogTitle id="max-width-dialog-title">{`구조물 추가 ${id}`}</DialogTitle>
+      <DialogTitle id="max-width-dialog-title">구조물 추가</DialogTitle>
       <DialogContent>
         <Grid container spacing={3} direction="row">
           <Grid container item xs={12}>
