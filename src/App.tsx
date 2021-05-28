@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 
 function App(): React.ReactElement {
   const classes = useStyles();
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
   };
