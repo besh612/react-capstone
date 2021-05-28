@@ -1,7 +1,6 @@
 import React from "react";
 import { Button } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { green } from "@material-ui/core/colors";
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -9,28 +8,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// interface ControlViewProps {
-//   comment: {
-//     state: string;
-//   };
-// }
+interface ControlViewProps {
+  handleCrackSave: () => void;
+}
 
-function ControlView(): React.ReactElement {
+function ControlView({
+  handleCrackSave,
+}: ControlViewProps): React.ReactElement {
   const classes = useStyles();
   return (
     <>
       <Button variant="outlined" color="primary" className={classes.button}>
         점검 시작
       </Button>
-      <Button variant="outlined" color="secondary" className={classes.button}>
-        점검 종료
-      </Button>
       <Button
         variant="outlined"
-        style={{ color: green[600], borderColor: green[600] }}
+        color="secondary"
         className={classes.button}
+        onClick={handleCrackSave}
       >
-        결과 출력
+        점검 종료
       </Button>
     </>
   );

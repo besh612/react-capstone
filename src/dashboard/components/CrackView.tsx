@@ -5,11 +5,17 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Checkbox from "@material-ui/core/Checkbox";
+import MenuItem from "@material-ui/core/MenuItem";
+import Select from "@material-ui/core/Select";
+
 import Title from "./Title";
 
 interface CrackViewProps {
   handleCrack: (select: number) => void;
+  handleRiskChange: (e: React.ChangeEvent<{ value: string | unknown }>) => void;
+  handleCrackChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   dataList: Array<Type>;
+  selected: number;
 }
 
 interface Type {
@@ -23,13 +29,17 @@ interface Type {
   };
   height?: number;
   width?: number;
-  riskLevel?: string;
+  riskLevel?: string | unknown;
   createdDate?: string;
+  isCrack?: boolean;
 }
 
 function CrackView({
+  selected,
   dataList,
   handleCrack,
+  handleRiskChange,
+  handleCrackChange,
 }: CrackViewProps): React.ReactElement {
   return (
     <>
@@ -38,27 +48,40 @@ function CrackView({
         <TableHead>
           <TableRow>
             <TableCell>Time</TableCell>
-            <TableCell>Width</TableCell>
-            <TableCell>Risk</TableCell>
             <TableCell>GPS</TableCell>
             <TableCell>ALT</TableCell>
-            <TableCell>isCrack</TableCell>
+            <TableCell>Risk</TableCell>
+            <TableCell>Crack</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {dataList.map((row, idx) => (
-            <TableRow key={row.id} onClick={() => handleCrack(idx)} hover>
+            <TableRow
+              key={row.id}
+              onClick={() => handleCrack(idx)}
+              hover
+              selected={idx === selected}
+            >
               <TableCell>{row.createdDate?.slice(11)}</TableCell>
-              <TableCell>{row.width}mm</TableCell>
-              <TableCell>{row.riskLevel}</TableCell>
               <TableCell size="medium">
                 {`x: ${row?.location?.locationX?.toFixed(
                   3
                 )} y: ${row?.location?.locationY?.toFixed(3)}`}
               </TableCell>
-              <TableCell>{row.height}cm</TableCell>
+              <TableCell>{row.height}cm</TableCell>{" "}
               <TableCell>
-                <Checkbox />
+                <Select
+                  id="risk-select"
+                  value={row.riskLevel}
+                  onChange={handleRiskChange}
+                >
+                  <MenuItem value="LOW">LOW</MenuItem>
+                  <MenuItem value="MEDIUM">MEDIUM</MenuItem>
+                  <MenuItem value="HIGH">HIGH</MenuItem>
+                </Select>
+              </TableCell>
+              <TableCell>
+                <Checkbox checked={row.isCrack} onChange={handleCrackChange} />
               </TableCell>
             </TableRow>
           ))}

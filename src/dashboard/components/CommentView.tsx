@@ -11,25 +11,29 @@ const useStyles = makeStyles({
 });
 
 interface CommentProps {
-  comment: {
-    state: string;
-  };
+  handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  comment: string;
 }
 
-function CommentView({ comment }: CommentProps): React.ReactElement {
+function CommentView({
+  comment,
+  handleInput,
+}: CommentProps): React.ReactElement {
   const classes = useStyles();
   return (
     <>
       <Title>상태</Title>
       <TextField
+        name="comment"
         variant="outlined"
         className={classes.commentField}
-        defaultValue={comment}
+        value={comment}
         multiline
-        rows={8}
+        onChange={handleInput}
+        rows={6}
       />
     </>
   );
 }
 
-export default CommentView;
+export default React.memo(CommentView);
