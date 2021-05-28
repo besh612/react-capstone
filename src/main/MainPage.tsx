@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -118,8 +119,12 @@ function MainPage(): React.ReactElement {
                     {row.name}
                   </TableCell>
                   <TableCell>{row.location.locationDetail}</TableCell>
-                  <TableCell align="right">{row.location.locationX}</TableCell>
-                  <TableCell align="right">{row.location.locationY}</TableCell>
+                  <TableCell align="right">
+                    {row.location.locationX.toFixed(3)}
+                  </TableCell>
+                  <TableCell align="right">
+                    {row.location.locationY.toFixed(3)}
+                  </TableCell>
                   <TableCell align="right">
                     {row.createdDate.slice(0, 10)}
                   </TableCell>
