@@ -68,7 +68,7 @@ function CrackView({
                   3
                 )} y: ${row?.location?.locationY?.toFixed(3)}`}
               </TableCell>
-              <TableCell>{row.height}cm</TableCell>{" "}
+              <TableCell>{row?.height?.toFixed(2)}cm</TableCell>{" "}
               <TableCell>
                 <Select
                   id="risk-select"
